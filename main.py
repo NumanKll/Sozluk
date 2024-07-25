@@ -8,7 +8,6 @@ mainscreen = Tk()
 mainscreen.geometry("320x250+300+300")
 mainscreen.resizable(width=False,height=FALSE)
 mainscreen.title("Sözlük")
-mainscreen.image_names()
 
 if not os.path.exists("./databases.db"):
     msg=messagebox.showwarning("Veritabanı Dosyası Bulunamadı")
@@ -20,9 +19,13 @@ if not os.path.exists("./databases.db"):
 
 def arama():
     kelime=kelimeAra.get()
-    aranan=db.kelime_Arama(kelime)
-    kelimeAnlamı2["text"] = aranan[0][0]
-    kelimeAnlamı4["text"] = aranan[0][1]
+    if kelimeAra.get() == "":
+        messagebox.showwarning("Uyarı","Arama Kelimesi Girilmedi")
+    else:
+        aranan=db.kelime_Arama(kelime)
+        print(aranan)
+        kelimeAnlamı2["text"] = aranan[0][0]
+        kelimeAnlamı4["text"] = aranan[0][1]
 
 def kelime_Ekle():
     if kelimeEkle.get() == "" and kelimeAnlam.get() == "":
@@ -35,11 +38,12 @@ def kelime_Ekle():
 def trans():
     if kelimeEkle.get() == "":
         messagebox.showerror("Uyarı","Kelime Boş Bırakılamaz")
-    anlam = translate.sorgula(kelimeEkle.get())
-    kelime = kelimeEkle.get()
-    kelimeAnlamı2["text"] = kelime
-    kelimeAnlamı4["text"] = anlam
-    db.kelime_ekleme(kelime,anlam)
+    else:  
+        kelime = kelimeEkle.get()  
+        anlam = translate.sorgula(kelime)
+        kelimeAnlamı2["text"] = kelime
+        kelimeAnlamı4["text"] = anlam
+        db.kelime_ekleme(kelime,anlam)
         
 aramaEtiket=Label(text="Aranacak Kelimeyi Girin :")
 aramaEtiket.place(x=10,y=10)

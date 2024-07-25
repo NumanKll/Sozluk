@@ -18,6 +18,8 @@ def kelime_Arama(kelime):
 def kelime_ekleme(kelime,anlam):
     db = sqlite3.connect("./databases.db") 
     cursor = db.cursor()
-    cursor.execute(f"Insert Into sozluk Values ('{kelime}','{anlam}')")
+    cursor.execute(f"Select * From sozluk Where kelime='{kelime}'")
+    if not cursor.fetchall():
+        cursor.execute(f"Insert Into sozluk Values ('{kelime}','{anlam}')")
     db.commit()
     db.close()
